@@ -105,7 +105,7 @@ public class Main {
             if (p>0) bi.put(String.valueOf(' ')+String.valueOf(monogramm1),(float)p/(length-1));
             if (k>0) bi.put(String.valueOf(monogramm1)+String.valueOf(' '),(float)k/(length-1));
         }
-
+        System.out.println(bi);
         FileWriter writer = new FileWriter("C:\\Users\\vadim\\IdeaProjects\\Laba1(git)\\1.txt", false);
         float entropy = 0;
         for (char monogramm1 = 'а'; monogramm1<='я'; monogramm1++)
@@ -123,6 +123,17 @@ public class Main {
             else writer.write("0.00000000 ");
 
         }
+            if (bi.get(String.valueOf(monogramm1)+String.valueOf(' '))!=null) {
+                float countity = (float) bi.get(String.valueOf(monogramm1)+String.valueOf(' '));
+                writer.write( String.valueOf(countity)+" ");
+                entropy -= countity*((float)Math.log(countity)/Math.log(2.0));
+            }
+            if (bi.get(String.valueOf(' ')+String.valueOf(monogramm1))!=null) {
+                float countity = (float) bi.get(String.valueOf(' ')+String.valueOf(monogramm1));
+                writer.write( String.valueOf(countity)+" ");
+                entropy -= countity*((float)Math.log(countity)/Math.log(2.0));
+            }
+            else writer.write("0.00000000 ");
             writer.write("\n");
             writer.flush();
     }
@@ -133,6 +144,13 @@ public class Main {
     }
 
     public static void frequencyOfbigramsAndEntropyWithNamespaceStep2(char[] ourText, int length) throws IOException {
+        int lengthBi;
+        if( length % 2 == 0) {
+           lengthBi = length/2;
+        } else {
+            lengthBi = (length-1)/2;
+        }
+
         Map bi = new HashMap<String, Float>();
         for (char monogramm1 = 'а'; monogramm1<='я'; monogramm1++){
             for (char monogramm2= 'а'; monogramm2<='я'; monogramm2++) {
@@ -140,14 +158,14 @@ public class Main {
                 for (i = 0; i < length - 2; i++) {
                     if (ourText[i] == monogramm1 && ourText[i + 2] == monogramm2) j++;
                 }
-                if (j>0) bi.put(String.valueOf(monogramm1)+String.valueOf(monogramm2),(float)j/length);
+                if (j>0) bi.put(String.valueOf(monogramm1)+String.valueOf(monogramm2),(float)j/lengthBi);
                 int p=0, k=0;
                 for (int h = 0; h<length-2; h++){
                     if(ourText[h] == ' ' && ourText[h+2] == monogramm1) p++;
                     if (ourText[h] == monogramm1 && ourText[h+2] == ' ') k++;
                 }
-                if (p>0) bi.put(String.valueOf(' ')+String.valueOf(monogramm1),(float)p/(length-1));
-                if (k>0) bi.put(String.valueOf(monogramm1)+String.valueOf(' '),(float)k/(length-1));
+                if (p>0) bi.put(String.valueOf(' ')+String.valueOf(monogramm1),(float)p/lengthBi);
+                if (k>0) bi.put(String.valueOf(monogramm1)+String.valueOf(' '),(float)k/lengthBi);
             }
         }
         //System.out.println(bi);
@@ -159,19 +177,28 @@ public class Main {
         for (char monogramm1 = 'а'; monogramm1<='я'; monogramm1++){
             writer.write(monogramm1+" ");
             for (char monogramm2= 'а'; monogramm2<='я'; monogramm2++) {
-
                 if (bi.get(String.valueOf(monogramm1)+String.valueOf(monogramm2))!=null) {
                     float countity = (float) bi.get(String.valueOf(monogramm1)+String.valueOf(monogramm2));
                     writer.write( String.valueOf(countity)+" ");
                     entropy -= countity*((float)Math.log(countity)/Math.log(2.0));
                 }
                 else writer.write("0.00000000 ");
-
             }
+            if (bi.get(String.valueOf(monogramm1)+String.valueOf(' '))!=null) {
+                float countity = (float) bi.get(String.valueOf(monogramm1)+String.valueOf(' '));
+                writer.write( String.valueOf(countity)+" ");
+                entropy -= countity*((float)Math.log(countity)/Math.log(2.0));
+            }
+            if (bi.get(String.valueOf(' ')+String.valueOf(monogramm1))!=null) {
+                float countity = (float) bi.get(String.valueOf(' ')+String.valueOf(monogramm1));
+                writer.write( String.valueOf(countity)+" ");
+                entropy -= countity*((float)Math.log(countity)/Math.log(2.0));
+            }
+            else writer.write("0.00000000 ");
             writer.write("\n");
             writer.flush();
         }
-        writer.write("\n"+ entropy);
+        writer.write("\n"+ "H2 = " + entropy);
         writer.flush();
         writer.close();
     }
@@ -233,7 +260,12 @@ public class Main {
         }
 
         int tempLength = length - countNamespace;
-
+        int lengthBi;
+        if( tempLength % 2 == 0) {
+            lengthBi = tempLength/2;
+        } else {
+            lengthBi = (tempLength-1)/2;
+        }
         Map bi = new HashMap<String, Float>();
         for (char monogramm1 = 'а'; monogramm1<='я'; monogramm1++){
             for (char monogramm2= 'а'; monogramm2<='я'; monogramm2++) {
@@ -241,7 +273,7 @@ public class Main {
                 for (i = 0; i < tempLength - 2; i++) {
                     if (tempText[i] == monogramm1 && tempText[i + 2] == monogramm2) j++;
                 }
-                if (j>0) bi.put(String.valueOf(monogramm1)+String.valueOf(monogramm2),(float)j/tempLength);
+                if (j>0) bi.put(String.valueOf(monogramm1)+String.valueOf(monogramm2),(float)j/lengthBi);
             }
         }
         FileWriter writer = new FileWriter("C:\\Users\\vadim\\IdeaProjects\\Laba1(git)\\4.txt", false);
